@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+      with:
+        version: 8.1.0
+
+    - name: Install LLVM
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get update && sudo apt-get install llvm-17-dev llvm-18-dev
+
+    - name: Install LLVM
+      if: matrix.os == 'macos-latest'
+      run: brew install llvm@17 llvm@18
+
+    - name: Build
+      run: bazel build //...
+
+    - name: Build
+      run: bazel build //...
+
+    - name: Test
+      run: bazel test //...
