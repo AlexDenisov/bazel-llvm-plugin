@@ -6,6 +6,7 @@ load("@rules_python//python:defs.bzl", "py_test")
 [
     py_test(
         name = "%s_%s_test" % (test, llvm_version),
+        size = "small",
         srcs = ["lit_runner.py"],
         args = [
             "-v",
